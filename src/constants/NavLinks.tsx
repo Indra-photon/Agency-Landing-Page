@@ -13,8 +13,8 @@ export const navlinks = [
     icon: IconBolt,
   },
   {
-    url: "/about",
-    label: "About",
+    url: "/what-we-do",
+    label: "What we do",
     icon: IconMessage2,
   },
   {

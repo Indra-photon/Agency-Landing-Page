@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { FileText, FolderOpen, Eye, Clock, ArrowUpRight, TrendingUp } from 'lucide-react';
+import { FileText, FolderOpen, Eye, Clock, ArrowUpRight, TrendingUp, MessageSquare, Mail } from 'lucide-react';
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 
@@ -42,7 +42,7 @@ export default function DashboardClient({ stats, recentBlogs }: any) {
                         Dashboard
                     </h1>
                     <p className="text-muted-foreground mt-2 text-lg">
-                        Welcome back! Here's what's happening with your blog today.
+                        Welcome back! Here's what's happening with your studio today.
                     </p>
                 </motion.div>
 
@@ -55,12 +55,13 @@ export default function DashboardClient({ stats, recentBlogs }: any) {
             </div>
 
             {/* Stats Grid */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
                 {[
                     { label: "Total Blogs", value: stats.totalBlogs, icon: FileText, sub: `${stats.publishedBlogs} published`, color: "bg-blue-500/10 text-blue-500" },
-                    { label: "Total Views", value: stats.totalViews.toLocaleString(), icon: Eye, sub: "Across all time", color: "bg-emerald-500/10 text-emerald-500" },
-                    { label: "Categories", value: stats.totalCategories, icon: FolderOpen, sub: "Active folders", color: "bg-purple-500/10 text-purple-500" },
-                    { label: "Featured", value: stats.featuredBlogs, icon: TrendingUp, sub: "Promoted content", color: "bg-orange-500/10 text-orange-500" },
+                    { label: "Total Views", value: stats.totalViews.toLocaleString(), icon: Eye, sub: "All time", color: "bg-emerald-500/10 text-emerald-500" },
+                    { label: "Categories", value: stats.totalCategories, icon: FolderOpen, sub: "Folders", color: "bg-purple-500/10 text-purple-500" },
+                    { label: "Inquiries", value: stats.totalContacts, icon: MessageSquare, sub: "Messages", color: "bg-orange-500/10 text-orange-500" },
+                    { label: "Featured", value: stats.featuredBlogs, icon: TrendingUp, sub: "Promoted", color: "bg-pink-500/10 text-pink-500" },
                 ].map((stat, i) => (
                     <motion.div key={i} variants={item}>
                         <Card className="glass-card overflow-hidden group hover:border-foreground/20 transition-all border-none shadow-sm ring-1 ring-border/50">
@@ -89,7 +90,7 @@ export default function DashboardClient({ stats, recentBlogs }: any) {
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
                 {/* Recent Blogs */}
-                <motion.div variants={item} className="lg:col-span-2">
+                <motion.div variants={item} className="lg:col-span-3 grid grid-cols-1 md:grid-cols-2 gap-8">
                     <Card className="glass-card border-none shadow-sm ring-1 ring-border/50">
                         <CardHeader className="flex flex-row items-center justify-between">
                             <div>
@@ -102,36 +103,71 @@ export default function DashboardClient({ stats, recentBlogs }: any) {
                         </CardHeader>
                         <CardContent>
                             {recentBlogs.length === 0 ? (
-                                <div className="text-center py-20 bg-muted/20 rounded-3xl border-2 border-dashed border-border">
+                                <div className="text-center py-10 bg-muted/20 rounded-3xl border-2 border-dashed border-border">
                                     <FileText className="w-12 h-12 text-muted-foreground/30 mx-auto mb-4" />
                                     <p className="text-muted-foreground font-medium">No blog posts found</p>
-                                    <Link href="/admin-panel/create-blog" className="text-foreground text-sm mt-2 block hover:underline">
-                                        Create your first post →
-                                    </Link>
                                 </div>
                             ) : (
                                 <div className="space-y-4">
-                                    {recentBlogs.map((blog: any) => (
+                                    {recentBlogs.slice(0, 4).map((blog: any) => (
                                         <Link
                                             key={blog._id}
                                             href={`/admin-panel/blogs/${blog._id}`}
                                             className="group flex items-center justify-between p-4 rounded-2xl hover:bg-accent/50 border border-transparent hover:border-border transition-all"
                                         >
                                             <div className="flex items-center gap-4">
-                                                <div className="w-12 h-12 rounded-xl bg-muted flex items-center justify-center group-hover:bg-background transition-colors">
-                                                    <FileText className="w-6 h-6 text-muted-foreground" />
+                                                <div className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center group-hover:bg-background transition-colors">
+                                                    <FileText className="w-5 h-5 text-muted-foreground" />
                                                 </div>
                                                 <div>
-                                                    <p className="font-bold text-foreground group-hover:text-primary transition-colors">{blog.title}</p>
+                                                    <p className="font-bold text-foreground group-hover:text-primary transition-colors line-clamp-1">{blog.title}</p>
                                                     <div className="flex items-center gap-3 mt-1">
                                                         <span className="flex items-center gap-1 text-xs text-muted-foreground whitespace-nowrap">
                                                             <Clock className="w-3 h-3" />
                                                             {isMounted ? new Date(blog.createdAt).toLocaleDateString() : '...'}
                                                         </span>
-                                                        <Badge variant={blog.isPublished ? "default" : "secondary"} className="rounded-md px-1.5 py-0 text-[10px] uppercase font-bold tracking-wider">
-                                                            {blog.isPublished ? "Published" : "Draft"}
-                                                        </Badge>
                                                     </div>
+                                                </div>
+                                            </div>
+                                            <ChevronRight className="w-5 h-5 text-muted-foreground/50 group-hover:text-foreground transform group-hover:translate-x-1 transition-all" />
+                                        </Link>
+                                    ))}
+                                </div>
+                            )}
+                        </CardContent>
+                    </Card>
+
+                    <Card className="glass-card border-none shadow-sm ring-1 ring-border/50">
+                        <CardHeader className="flex flex-row items-center justify-between">
+                            <div>
+                                <CardTitle className="text-2xl">Recent Inquiries</CardTitle>
+                                <CardDescription>New messages from potential clients</CardDescription>
+                            </div>
+                            <Link href="/admin-panel/contacts" className="text-sm font-medium hover:underline text-muted-foreground">
+                                View All
+                            </Link>
+                        </CardHeader>
+                        <CardContent>
+                            {!stats.recentContacts || stats.recentContacts.length === 0 ? (
+                                <div className="text-center py-10 bg-muted/20 rounded-3xl border-2 border-dashed border-border">
+                                    <MessageSquare className="w-12 h-12 text-muted-foreground/30 mx-auto mb-4" />
+                                    <p className="text-muted-foreground font-medium">No new inquiries</p>
+                                </div>
+                            ) : (
+                                <div className="space-y-4">
+                                    {stats.recentContacts.map((contact: any) => (
+                                        <Link
+                                            key={contact._id}
+                                            href="/admin-panel/contacts"
+                                            className="group flex items-center justify-between p-4 rounded-2xl hover:bg-accent/50 border border-transparent hover:border-border transition-all"
+                                        >
+                                            <div className="flex items-center gap-4">
+                                                <div className="w-10 h-10 rounded-xl bg-muted flex items-center justify-center group-hover:bg-background transition-colors">
+                                                    <Mail className="w-5 h-5 text-muted-foreground" />
+                                                </div>
+                                                <div>
+                                                    <p className="font-bold text-foreground group-hover:text-primary transition-colors line-clamp-1">{contact.name}</p>
+                                                    <p className="text-xs text-muted-foreground line-clamp-1">{contact.subject}</p>
                                                 </div>
                                             </div>
                                             <ChevronRight className="w-5 h-5 text-muted-foreground/50 group-hover:text-foreground transform group-hover:translate-x-1 transition-all" />
