@@ -9,25 +9,25 @@
 //     try {
 //         // Get total blogs count
 //         const totalBlogs = await BlogModel.countDocuments();
-        
+
 //         // Get published blogs count
 //         const publishedBlogs = await BlogModel.countDocuments({ isPublished: true });
-        
+
 //         // Get draft blogs count
 //         const draftBlogs = await BlogModel.countDocuments({ isPublished: false });
-        
+
 //         // Get featured blogs count
 //         const featuredBlogs = await BlogModel.countDocuments({ isFeatured: true });
-        
+
 //         // Get total categories
 //         const totalCategories = await BlogCategoryModel.countDocuments({ isActive: true });
-        
+
 //         // Get total views across all blogs
 //         const viewsAggregate = await BlogModel.aggregate([
 //             { $group: { _id: null, totalViews: { $sum: '$views' } } }
 //         ]);
 //         const totalViews = viewsAggregate.length > 0 ? viewsAggregate[0].totalViews : 0;
-        
+
 //         // Get recent blogs (last 5)
 //         const recentBlogs = await BlogModel.find()
 //             .sort({ createdAt: -1 })
@@ -65,6 +65,7 @@ import { NextRequest, NextResponse } from 'next/server'; // ADD NextResponse
 import dbConnect from '@/lib/dbConnect';
 import BlogModel from '../../models/Blog';
 import BlogCategoryModel from '../../models/BlogCategory';
+import ContactModel from '../../models/Contact';
 
 export async function GET(request: NextRequest) {
     await dbConnect();
@@ -72,25 +73,28 @@ export async function GET(request: NextRequest) {
     try {
         // Get total blogs count
         const totalBlogs = await BlogModel.countDocuments();
-        
+
         // Get published blogs count
         const publishedBlogs = await BlogModel.countDocuments({ isPublished: true });
-        
+
         // Get draft blogs count
         const draftBlogs = await BlogModel.countDocuments({ isPublished: false });
-        
+
         // Get featured blogs count
         const featuredBlogs = await BlogModel.countDocuments({ isFeatured: true });
-        
+
         // Get total categories
         const totalCategories = await BlogCategoryModel.countDocuments({ isActive: true });
-        
+
+        // Get total contacts
+        const totalContacts = await ContactModel.countDocuments();
+
         // Get total views across all blogs
         const viewsAggregate = await BlogModel.aggregate([
             { $group: { _id: null, totalViews: { $sum: '$views' } } }
         ]);
         const totalViews = viewsAggregate.length > 0 ? viewsAggregate[0].totalViews : 0;
-        
+
         // Get recent blogs (last 5)
         const recentBlogs = await BlogModel.find()
             .sort({ createdAt: -1 })
@@ -98,7 +102,14 @@ export async function GET(request: NextRequest) {
             .select('title slug isPublished createdAt')
             .lean();
 
-        return NextResponse.json( // CHANGE HERE
+        // Get recent contacts (last 5)
+        const recentContacts = await ContactModel.find()
+            .sort({ createdAt: -1 })
+            .limit(5)
+            .select('name email subject createdAt')
+            .lean();
+
+        return NextResponse.json(
             {
                 success: true,
                 stats: {
@@ -107,7 +118,9 @@ export async function GET(request: NextRequest) {
                     draftBlogs,
                     featuredBlogs,
                     totalCategories,
-                    totalViews
+                    totalViews,
+                    totalContacts,
+                    recentContacts
                 },
                 recentBlogs
             },

@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { LayoutDashboard, FileText, FolderOpen, Settings, Video, LogOut, ChevronRight } from 'lucide-react';
+import { LayoutDashboard, FileText, FolderOpen, Settings, Video, LogOut, ChevronRight, MessageSquare } from 'lucide-react';
 import { Separator } from '@/components/ui/separator';
 
 export default function AdminLayout({
@@ -30,6 +30,7 @@ export default function AdminLayout({
             { href: "/admin-panel/blogs", icon: FileText, label: "Blogs" },
             { href: "/admin-panel/create-blog", icon: FileText, label: "Create Blog" },
             { href: "/admin-panel/categories", icon: FolderOpen, label: "Categories" },
+            { href: "/admin-panel/contacts", icon: MessageSquare, label: "Contacts" },
             { href: "/admin-panel/craft-videos", icon: Video, label: "Craft Videos" },
           ].map((item) => (
             <Link
