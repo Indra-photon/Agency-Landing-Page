@@ -5,6 +5,7 @@ import LenisProvider from "@/components/LenisProvider";
 import { ThemeProvider } from "@/context/ThemeContext";
 import BlobCursor from "@/components/ui/BlobCursor";
 import ClickSpark from "@/components/ui/ClickSpark";
+import { Toaster } from "@/components/ui/sonner";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -44,6 +45,7 @@ export default function RootLayout({
             extraScale={1}
           />
           <LenisProvider>{children}</LenisProvider>
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>
