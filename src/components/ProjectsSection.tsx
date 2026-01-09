@@ -52,6 +52,7 @@ type Project = {
   link: string;
   technologies: string[];
   img: string;
+  description?: string;
 };
 
 interface ProjectCardProps {
@@ -85,11 +86,12 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project, index }) => {
       
       <div className="flex gap-3 mb-6 flex-wrap">
         {project.technologies.map((tech, index) => (
-          <span key={index} className="px-4 py-2 bg-primary rounded-full text-sm text-muted-foreground font-medium">
+          <span key={index} className="px-4 py-2 bg-secondary rounded-full text-sm text-muted-foreground font-medium">
             {tech}
           </span>
         ))}
       </div>
+      
       
       <div className="relative">
         <div className={`w-full h-96 rounded-2xl overflow-hidden`}>
