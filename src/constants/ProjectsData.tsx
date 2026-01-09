@@ -1,11 +1,11 @@
 export const ProjectsData = [
   {
     id: 1,
-    title: "Portfolio Website",
-    description: "A personal portfolio website to showcase my projects and skills.",
-    technologies: ["React", "TypeScript", "CSS"],
-    link: "https://myportfolio.com",
-    img: 'https://images.pexels.com/photos/7190922/pexels-photo-7190922.jpeg'
+    title: "ToonyTalesworld",
+    description: "An AI powered platform for creating coloured personalized storybooks for kids",
+    technologies: ["React", "TypeScript", "Tailwind CSS"],
+    link: "https://www.toonytalesworld.com/",
+    img: '/toontalesworld.png'
   },
   {
     id: 2,
